@@ -47,6 +47,7 @@ function Board({ xIsNext, squares, onPlay }) {
 export default function Game() {
 	const [history, setHistory] = useState([new Array(9).fill(null)]);
 	const [currentMove, setCurrentMove] = useState(0);
+	const [descendingMoves, setDescendingMoves] = useState(false);
 	const xIsNext = currentMove % 2 === 0;
 	const currentSquares = history[currentMove];
 
@@ -58,6 +59,10 @@ export default function Game() {
 
 	function jumpTo(nextMove) {
 		setCurrentMove(nextMove);
+	}
+
+	function handleMovesOrder() {
+		setDescendingMoves(prevDescendingMoves => !prevDescendingMoves);
 	}
 
 	const moves = history.map((squares, move, historyArr) => {
@@ -74,6 +79,8 @@ export default function Game() {
 		}
 	});
 
+	descendingMoves ? moves.reverse() : null;
+
 	return (
 		<div className="game">
 			<div className="game-board">
@@ -84,7 +91,15 @@ export default function Game() {
 				/>
 			</div>
 			<div className="game-info">
-				<ol>{moves}</ol>
+				<button
+					className="btn-moves-direction"
+					onClick={handleMovesOrder}
+				>
+					{descendingMoves
+						? "Switch moves order to ascending"
+						: "Switch moves order to descending"}
+				</button>
+				{descendingMoves ? <ol reversed>{moves}</ol> : <ol>{moves}</ol>}
 			</div>
 		</div>
 	);
