@@ -1,5 +1,9 @@
 /** @format */
 
+/* 
+
+*/
+
 import { useState } from "react";
 
 function Square({ value, onSquareClick, winningLines, squareNum }) {
@@ -23,7 +27,7 @@ function Square({ value, onSquareClick, winningLines, squareNum }) {
 	);
 }
 
-function Board({ xIsNext, squares, onPlay }) {
+function Board({ xIsNext, squares, onPlay, handleMovesLocations }) {
 	function handleClick(i) {
 		if (squares[i] || calculateWinner(squares)) return;
 		const nextSquares = squares.slice();
@@ -48,7 +52,10 @@ function Board({ xIsNext, squares, onPlay }) {
 						return (
 							<Square
 								value={squares[squareNum]}
-								onSquareClick={() => handleClick(squareNum)}
+								onSquareClick={() => {
+									handleClick(squareNum);
+									handleMovesLocations(squareNum);
+								}}
 								key={squareNum}
 								winningLines={winingStatus?.winningLines}
 								squareNum={squareNum}
@@ -64,6 +71,7 @@ function Board({ xIsNext, squares, onPlay }) {
 export default function Game() {
 	const [history, setHistory] = useState([new Array(9).fill(null)]);
 	const [currentMove, setCurrentMove] = useState(0);
+	const [movesLocations, setMovesLocations] = useState([null]);
 	const [descendingMoves, setDescendingMoves] = useState(false);
 	const xIsNext = currentMove % 2 === 0;
 	const currentSquares = history[currentMove];
@@ -82,12 +90,36 @@ export default function Game() {
 		setDescendingMoves(prevDescendingMoves => !prevDescendingMoves);
 	}
 
+	function handleMovesLocations(squareNum) {
+		const squareNumCoordinates = {
+			// SquareNum : [row,col]
+			0: [1, 1],
+			1: [1, 2],
+			2: [1, 3],
+			3: [2, 1],
+			4: [2, 2],
+			5: [2, 3],
+			6: [3, 1],
+			7: [3, 2],
+			8: [3, 3],
+		};
+
+		const currentLocation = squareNumCoordinates[squareNum];
+		const nextMovesLocations = [
+			...movesLocations.slice(0, currentMove + 1),
+			currentLocation,
+		];
+		setMovesLocations(nextMovesLocations);
+	}
+
 	const moves = history.map((squares, move, historyArr) => {
 		if (move === historyArr.length - 1) {
 			return <li key={move}>You are at move #{move}</li>;
 		} else {
 			const description =
-				move > 0 ? `Go to move #${move}` : "Go to game start";
+				move > 0
+					? `Go to move #${move} (${movesLocations[move][0]},${movesLocations[move][1]})`
+					: "Go to game start";
 			return (
 				<li key={move}>
 					<button onClick={() => jumpTo(move)}>{description}</button>
@@ -105,6 +137,7 @@ export default function Game() {
 					xIsNext={xIsNext}
 					squares={currentSquares}
 					onPlay={handlePlay}
+					handleMovesLocations={handleMovesLocations}
 				/>
 			</div>
 			<div className="game-info">
