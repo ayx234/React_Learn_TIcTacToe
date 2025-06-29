@@ -2,6 +2,14 @@
 
 import { useState } from "react";
 
+/**
+ * Square component represents a single square in the tic-tac-toe board.
+ * @param {object} props
+ * @param {string|null} props.value - The value to display ("X", "O", or null).
+ * @param {function} props.onSquareClick - Handler for when the square is clicked.
+ * @param {number[]|undefined} props.winingLines - Array of winning square indices, if any.
+ * @param {number} props.squareNum - The index of this square.
+ */
 function Square({ value, onSquareClick, winingLines, squareNum }) {
 	return (
 		<button
@@ -19,8 +27,21 @@ function Square({ value, onSquareClick, winingLines, squareNum }) {
 	);
 }
 
+/**
+ * Board component renders the tic-tac-toe board and handles user interactions.
+ * @param {object} props
+ * @param {boolean} props.xIsNext - True if "X" is the next player.
+ * @param {string[]} props.squares - Current squares' status of the board.
+ * @param {function} props.onPlay - Handler for when a move is made.
+ * @param {function} props.handleCoordinates - Handler to record move coordinates.
+ */
 function Board({ xIsNext, squares, onPlay, handleCoordinates }) {
+	/**
+	 * Handles a click on a square.
+	 * @param {number} i - The index of the clicked square.
+	 */
 	function handleClick(i) {
+		// Ignore click if square is filled or game is over
 		if (squares[i] || calculateWinner(squares)) return;
 		const nextSquares = squares.slice();
 		nextSquares[i] = xIsNext ? "X" : "O";
@@ -40,6 +61,7 @@ function Board({ xIsNext, squares, onPlay, handleCoordinates }) {
 	return (
 		<>
 			<div className="status">{status}</div>
+			{/* Render 3x3 board */}
 			{Array.from({ length: 3 }, (_, i) => (
 				<div className="board-row" key={i}>
 					{Array.from({ length: 3 }, (_, j) => {
@@ -63,6 +85,9 @@ function Board({ xIsNext, squares, onPlay, handleCoordinates }) {
 	);
 }
 
+/**
+ * Game component manages the state and logic for the tic-tac-toe game.
+ */
 export default function Game() {
 	const [history, setHistory] = useState([new Array(9).fill(null)]);
 	const [currentMove, setCurrentMove] = useState(0);
@@ -72,20 +97,35 @@ export default function Game() {
 	const xIsNext = currentMove % 2 === 0;
 	const currentSquares = history[currentMove];
 
+	/**
+	 * Handles a new move and updates the game history.
+	 * @param {string[]} nextSquares - The new board state (values of squares).
+	 */
 	function handlePlay(nextSquares) {
 		const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
 		setHistory(nextHistory);
 		setCurrentMove(nextHistory.length - 1);
 	}
 
+	/**
+	 * Jumps to a specific move in the game history.
+	 * @param {number} nextMove - The move index to jump to.
+	 */
 	function jumpTo(nextMove) {
 		setCurrentMove(nextMove);
 	}
 
+	/**
+	 * Toggles the order of the move list.
+	 */
 	function handleMovesOrder() {
 		setIsDescendingMoves(!isDescendingMoves);
 	}
 
+	/**
+	 * Records the coordinates of the move.
+	 * @param {number} squareNum - The index of the square played.
+	 */
 	function handleCoordinates(squareNum) {
 		const squareCoordinates = [
 			// SquareNum : [row,col]
@@ -108,6 +148,7 @@ export default function Game() {
 		setPlayCoordinates(nextMovesLocations);
 	}
 
+	// Generate the list of moves for display
 	const moves = history.map((_, move) => {
 		// is it the latest move?
 		if (move === history.length - 1) {
@@ -137,6 +178,7 @@ export default function Game() {
 		}
 	});
 
+	// Reverse moves if descending order is selected
 	isDescendingMoves ? moves.reverse() : null;
 
 	return (
@@ -172,6 +214,11 @@ export default function Game() {
 	);
 }
 
+/**
+ * Determines if there is a winner in the current board state.
+ * @param {string[]} squares - The current board state.
+ * @returns {{winner: string, winingLines: number[]} | null}
+ */
 function calculateWinner(squares) {
 	const winingLines = [
 		[0, 1, 2],

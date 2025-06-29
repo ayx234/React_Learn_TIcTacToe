@@ -1,5 +1,9 @@
 /** @format */
 
+/* Stylesheet for the Tic-Tac-Toe React application.
+   Provides layout, typography, and board styling.
+*/
+
 * {
 	box-sizing: border-box;
 }
