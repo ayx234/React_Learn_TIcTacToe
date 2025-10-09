@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/React_Learn_TIcTacToe/static/css/main.2cb9a270.css",
+    "main.js": "/React_Learn_TIcTacToe/static/js/main.c6f1e098.js",
+    "index.html": "/React_Learn_TIcTacToe/index.html",
+    "main.2cb9a270.css.map": "/React_Learn_TIcTacToe/static/css/main.2cb9a270.css.map",
+    "main.c6f1e098.js.map": "/React_Learn_TIcTacToe/static/js/main.c6f1e098.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2cb9a270.css",
+    "static/js/main.c6f1e098.js"
+  ]
+}
