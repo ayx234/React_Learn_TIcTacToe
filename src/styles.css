@@ -143,6 +143,7 @@ h1 {
 button {
 	font: inherit;
 	font-size: var(--step-0);
+	color: inherit; /* Firefox on ios needs the to be set explicitly */
 }
 
 ol {
