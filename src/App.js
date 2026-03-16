@@ -55,32 +55,34 @@ function Board({ xIsNext, squares, onPlay, handleCoordinates }) {
 	const status = winner
 		? `Winner: ${winner}`
 		: isDraw
-		? "Draw!!"
-		: `Next Player: ${xIsNext ? "X" : "O"}`;
+			? "Draw!!"
+			: `Next Player: ${xIsNext ? "X" : "O"}`;
 
 	return (
 		<>
 			<div className="status">{status}</div>
 			{/* Render 3x3 board */}
-			{Array.from({ length: 3 }, (_, i) => (
-				<div className="board-row" key={i}>
-					{Array.from({ length: 3 }, (_, j) => {
-						const squareNum = i * 3 + j;
-						return (
-							<Square
-								key={squareNum}
-								value={squares[squareNum]}
-								onSquareClick={() => {
-									handleClick(squareNum);
-									handleCoordinates(squareNum);
-								}}
-								winingLines={winingLines}
-								squareNum={squareNum}
-							/>
-						);
-					})}
-				</div>
-			))}
+			<div className="board">
+				{Array.from({ length: 3 }, (_, i) => (
+					<div className="board-row" key={i}>
+						{Array.from({ length: 3 }, (_, j) => {
+							const squareNum = i * 3 + j;
+							return (
+								<Square
+									key={squareNum}
+									value={squares[squareNum]}
+									onSquareClick={() => {
+										handleClick(squareNum);
+										handleCoordinates(squareNum);
+									}}
+									winingLines={winingLines}
+									squareNum={squareNum}
+								/>
+							);
+						})}
+					</div>
+				))}
+			</div>
 		</>
 	);
 }
@@ -167,12 +169,12 @@ export default function Game() {
 			const description =
 				move > 0
 					? // board is not in initial state? (we have Xs on the board)
-					  `Go to move #${move} (${playCoordinates[move]})`
+						`Go to move #${move} (${playCoordinates[move]})`
 					: // no plays yet
-					  "Go to game start";
+						"Go to game start";
 			return (
 				<li key={move}>
-					<button onClick={() => jumpTo(move)}>{description}</button>
+					<button className="game-info__button" onClick={() => jumpTo(move)}>{description}</button>
 				</li>
 			);
 		}
@@ -182,33 +184,37 @@ export default function Game() {
 	isDescendingMoves ? moves.reverse() : null;
 
 	return (
-		<div className="game">
-			<div className="game-board">
-				<Board
-					xIsNext={xIsNext}
-					squares={currentSquares}
-					onPlay={handlePlay}
-					handleCoordinates={handleCoordinates}
-				/>
-			</div>
-			<div className="game-info">
-				<button onClick={handleMovesOrder}>
-					{isDescendingMoves
-						? "Show moves in ascending order"
-						: "Show moves in descending order"}
-				</button>
-				<hr />
-				<ol
-					style={{
-						listStyleType: "none",
-						paddingLeft: "0",
-						display: "flex",
-						flexDirection: "column",
-						alignItems: "center",
-					}}
-				>
-					{moves}
-				</ol>
+		<div className="page">
+			<h1>Tic Tac Toe Using React</h1>
+			<div className="game">
+				<div className="game-board">
+					<Board
+						xIsNext={xIsNext}
+						squares={currentSquares}
+						onPlay={handlePlay}
+						handleCoordinates={handleCoordinates}
+					/>
+				</div>
+				<div className="game-info">
+					<button className="game-info__button" onClick={handleMovesOrder}>
+						{isDescendingMoves
+							? "Show moves in ascending order"
+							: "Show moves in descending order"}
+					</button>
+					<hr />
+					<ol
+						className="game-info__ol"
+						style={{
+							listStyleType: "none",
+							paddingLeft: "0",
+							display: "flex",
+							flexDirection: "column",
+							alignItems: "center",
+						}}
+					>
+						{moves}
+					</ol>
+				</div>
 			</div>
 		</div>
 	);

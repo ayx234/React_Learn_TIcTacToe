@@ -2,79 +2,219 @@
 
 /* Stylesheet for the Tic-Tac-Toe React application.
    Provides layout, typography, and board styling.
+
+
+	 IMPORTANT
+
+	 1. float, on .squares, clearfix on .board-row:after 
+	 and negative margines on .squares are just to practice
+	 the example on this React's project. 
+	 CSS grid is a better choice.
+
+	 2. inline styles inserted in App.js for .game-info__o
+	 using JSX were also only for practice
+
 */
+
+/* 
+font family and button styles gotten from:
+https://codepen.io/tmrDevelops/pen/VeRvKX
+
+*/
+
+@import url(https://fonts.googleapis.com/css?family=Patrick+Hand+SC);
+
+/* ----- 1. SETTINGS [font sizing, spacing, colors] ----- */
+
+/* */
+/**
+* @link https://utopia.fyi/space/calculator?c=320,16,1.2,768,18,1.25,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12
+* TYPOGRAPHY & SPACING SCALE (Utopia Fluid Scale System)
+ * Responsive typography that scales between mobile (320px) and desktop (768px)
+ * Calculator: https://utopia.fyi/...
+ * Features: Automatic scaling without media queries using clamp()
+ */
+
+:root {
+	/* --- Font sizes --- */
+	--step--2: clamp(0.6944rem, 0.6762rem + 0.0913vw, 0.72rem);
+	--step--1: clamp(0.8333rem, 0.7857rem + 0.2381vw, 0.9rem);
+	--step-0: clamp(1rem, 0.9107rem + 0.4464vw, 1.125rem);
+	--step-1: clamp(1.2rem, 1.0527rem + 0.7366vw, 1.4063rem);
+	--step-2: clamp(1.44rem, 1.213rem + 1.135vw, 1.7578rem);
+	--step-3: clamp(1.728rem, 1.3928rem + 1.6759vw, 2.1973rem);
+	--step-4: clamp(2.0736rem, 1.5929rem + 2.4035vw, 2.7466rem);
+	--step-5: clamp(2.4883rem, 1.8134rem + 3.3747vw, 3.4332rem);
+
+	/* --- Spacing [margins, padding] --- */
+	/* Standard pairs */
+	--space-3xs: clamp(0.25rem, 0.2054rem + 0.2232vw, 0.3125rem);
+	--space-2xs: clamp(0.5rem, 0.4554rem + 0.2232vw, 0.5625rem);
+	--space-xs: clamp(0.75rem, 0.6607rem + 0.4464vw, 0.875rem);
+	--space-s: clamp(1rem, 0.9107rem + 0.4464vw, 1.125rem);
+	--space-m: clamp(1.5rem, 1.3661rem + 0.6696vw, 1.6875rem);
+	--space-l: clamp(2rem, 1.8214rem + 0.8929vw, 2.25rem);
+	--space-xl: clamp(3rem, 2.7321rem + 1.3393vw, 3.375rem);
+	--space-2xl: clamp(4rem, 3.6429rem + 1.7857vw, 4.5rem);
+	--space-3xl: clamp(6rem, 5.4643rem + 2.6786vw, 6.75rem);
+
+	/* One-up pairs */
+	--space-3xs-2xs: clamp(0.25rem, 0.0268rem + 1.1161vw, 0.5625rem);
+	--space-2xs-xs: clamp(0.5rem, 0.2321rem + 1.3393vw, 0.875rem);
+	--space-xs-s: clamp(0.75rem, 0.4821rem + 1.3393vw, 1.125rem);
+	--space-s-m: clamp(1rem, 0.5089rem + 2.4554vw, 1.6875rem);
+	--space-m-l: clamp(1.5rem, 0.9643rem + 2.6786vw, 2.25rem);
+	--space-l-xl: clamp(2rem, 1.0179rem + 4.9107vw, 3.375rem);
+	--space-xl-2xl: clamp(3rem, 1.9286rem + 5.3571vw, 4.5rem);
+	--space-2xl-3xl: clamp(4rem, 2.0357rem + 9.8214vw, 6.75rem);
+
+	/* Custom pairs */
+	--space-2-3: clamp(0.125rem, 0.0804rem + 0.2232vw, 0.1875rem);
+	--space-2-4: clamp(0.125rem, 0.0357rem + 0.4464vw, 0.25rem);
+	--space-s-l: clamp(1rem, 0.1071rem + 4.4643vw, 2.25rem);
+	--space-l-3xl: clamp(2rem, -1.3929rem + 16.9643vw, 6.75rem);
+	--space-xl-3xl: clamp(3rem, 0.3214rem + 13.3929vw, 6.75rem);
+
+	/* Static */
+	--space-wide-button-padding: 0.25rem 0.5rem;
+	--space-wide-button-margin: 0 1rem;
+	/* --- Colors --- */
+	--color-squares-background: #fafafa;
+	--color-text-alternative: #999;
+	--color-text: #41403e;
+	--color--buttons: rgba(255, 251, 0, 0.5);
+	--color--buttons-hover: rgba(255, 251, 0, .75);
+	--color-black-shade-20: hsla(0, 0%, 0%, 0.2);
+	--color-black-shade-30: hsla(0, 0%, 0%, 0.3);
+
+	/* --background-color obtained through ai to look like a notepad page and
+	 complement and contrast the transparent-yellow above */
+	--color-background: linear-gradient(
+		135deg,
+		#fefdf8 0%,
+		#fffbf0 25%,
+		#fef8e8 50%,
+		#fce8c3 75%,
+		#e8d4a0 100%
+	);
+
+	/* --- Borders --- */
+	--fluid-border-4-16: solid clamp(0.25rem, -0.2857rem + 2.6786vw, 1rem)
+		var(--color-text);
+	--fluid-border-4-8: solid clamp(0.25rem, 0.0714rem + 0.8929vw, 0.5rem)
+		var(--color-text);
+	--game-board-border: solid var(--space-2-3, 4px) var(--color-text, #41403e);
+	/**
+	* --uneven-border-radius
+ * ROUNDED CORNER STYLING
+ * Uses asymmetric border-radius to create an informal, playful aesthetic
+ * Radius order: top-left, top-right, bottom-right, bottom-left (both horizontal/vertical)
+ * Effect: Creates unique corner shapes that align with the game's friendly UI
+ */
+	--uneven-border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+
+	/*  --- Shadows  --- */
+	--text-shadow: 0 0.15em 0.15em var(--color-black-shade-30, hsla(0, 0%, 0%, 0.3));
+	--box-shadow: 20px 38px 34px -26px var(--color-black-shade-20,hsla(0, 0%, 0%, 0.2));
+	--box-shadow-button-hover: 2px 8px 4px -6px var(--color-black-shade-30,hsla(0, 0%, 0%, 0.3));
+}
+
+/* ----- 2. RESET & BASE [General styles] ----- */
 
 * {
 	box-sizing: border-box;
 }
 
 body {
-	font-family: sans-serif;
-	margin: 20px;
+	font-family: "Patrick Hand SC", cursive;
+	margin: var(--step-2, 1.5rem);
 	padding: 0;
+	background: var(--color-background, lightyellow);
+	min-height: 100dvh;
 }
 
 h1 {
-	margin-top: 0;
-	font-size: 22px;
+	text-shadow: var(--text-shadow, 0 0.15em 0.15em darkgrey);
+	font-size: var(--step-4);
+	margin-top: 0; /* fallback - ios safari < 12.2 */
+	margin-block-start: 0;
 }
 
-h2 {
-	margin-top: 0;
-	font-size: 20px;
+button {
+	font: inherit;
+	font-size: var(--step-0);
 }
 
-h3 {
-	margin-top: 0;
-	font-size: 18px;
+ol {
+	margin: 0;
 }
 
-h4 {
-	margin-top: 0;
-	font-size: 16px;
+hr {
+	width: 100%;
 }
 
-h5 {
-	margin-top: 0;
-	font-size: 14px;
-}
+/* 3. LAYOUT & COMPOSITION */
 
-h6 {
-	margin-top: 0;
-	font-size: 12px;
-}
-
-code {
-	font-size: 1.2em;
-}
-
-ul {
-	padding-inline-start: 20px;
-}
-
-* {
-	box-sizing: border-box;
-}
-
-body {
-	font-family: sans-serif;
-	margin: 20px;
-	padding: 0;
-}
-
-.square {
-	background: #fff;
-	border: 1px solid #999;
-	float: left;
-	font-size: 24px;
-	font-weight: bold;
-	line-height: 34px;
-	height: 34px;
-	margin-right: -1px;
-	margin-top: -1px;
-	padding: 0;
+.page {
+	display: grid;
+	align-content: start;
 	text-align: center;
-	width: 34px;
+	font-size: var(--step-1, 1.3rem);
+}
+
+.game {
+	margin-top: var(--space-l-3xl, 2rem); /* fallback - safary ios < 12.2 */
+	margin-block-start: var(--space-l-3xl, 2rem);
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: center;
+	gap: var(--space-m-l, 1.5rem);
+}
+
+.game > * {
+	flex-shrink: 0;
+}
+/* ----- 4. COMPONENTS [blocks] ----- */
+
+.board,
+.board-row,
+.square,
+.game-info__button {
+	border: var(--game-board-border);
+	border-radius: var(
+		--uneven-border-radius,
+		255px 15px 225px 15px/15px 225px 15px 255px
+	);
+	box-shadow: var(--box-shadow, 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2));
+}
+
+.game-info__ol {
+	display: grid;
+	gap: 0.5rem;
+}
+
+.game-info__button {
+	background-color: var(--color--buttons);
+	font-size: var(--step-1);
+	padding: var(--space-wide-button-padding, 0.25rem 0.5rem);
+	margin: var(--space-wide-button-margin, 0 1rem);
+	color: var(--color-text, #41403e);
+	letter-spacing: 1px;
+	outline: none;
+	transition: all 0.5s ease;
+}
+
+.game-info__button:is(:hover, :focus-visible) {
+	background-color: var(--color--buttons-hover); /* Increase alpha on hover */
+	box-shadow: var(
+		--box-shadow-button-hover,
+		2px 8px 4px -6px hsla(0, 0%, 0%, 0.3)
+	);
+	box-shadow: var(
+		--box-shadow-button-hover,
+		2px 8px 4px -6px hsla(0, 0%, 0%, 0.3)
+	);
 }
 
 .board-row:after {
@@ -83,14 +223,22 @@ body {
 	display: table;
 }
 
-.status {
-	margin-bottom: 10px;
-}
-.game {
-	display: flex;
-	flex-direction: row;
+.square {
+	background: var(--color-squares-background, #fafafa);
+	float: left;
+	font-size: var(--step-5);
+	font-weight: bold;
+	height: var(--space-2xl-3xl);
+	width: var(--space-2xl-3xl);
+	margin-right: calc(
+		(var(--fluid-border-4-8) * -1)
+	); /* cloppses borders for inner squares */
+	margin-top: calc(
+		(var(--fluid-border-4-8) * -1)
+	); /* cloppses borders for inner squares */
+	text-align: center;
 }
 
-.game-info {
-	margin-left: 20px;
+.status {
+	margin-bottom: var(--space-m-l);
 }
