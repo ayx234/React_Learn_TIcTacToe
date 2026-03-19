@@ -4,6 +4,10 @@
 
 This project is a React implementation of the classic Tic-Tac-Toe game, demonstrating the use of React functional components, hooks, and state management.
 
+## Screenshot
+
+![Screenshot](screenshot.png)
+
 ## Features
 
 - Playable 3x3 Tic-Tac-Toe board
